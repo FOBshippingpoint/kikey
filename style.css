@@ -1,0 +1,96 @@
+:root {
+  font-family: "Noto Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+  --blue: #45a8ff;
+  --green: #45ff90;
+  --sky: #08d1fd;
+  --white: #fafef8;
+}
+
+body {
+  background-color: var(--white);
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0)
+  );
+}
+
+.intro {
+  color: var(--sky);
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.intro a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 0.15rem;
+}
+
+main {
+  max-width: fit-content;
+  margin-inline: auto;
+  min-width: 60vw;
+}
+
+h1 {
+  font-size: 5rem;
+  text-align: center;
+  margin-inline: auto;
+  width: fit-content;
+  background: linear-gradient(247deg, var(--green) 0%, 50%, var(--blue) 100%);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+code {
+  border-radius: 1rem;
+}
+
+kbd {
+	background-color: var(--blue);
+	border-radius: 18px;
+	color: #fff;
+	display: inline-block;
+	font-size: 1.5rem;
+	line-height: 28px;
+	margin-right: 12px;
+	padding: 3px 12px 3px;
+}
+
+.section {
+  margin-inline: 5%;
+}
+
+ruby {
+  color: var(--blue);
+}
+
+#letter-M.rotate {
+  display: inline-block;
+  animation: rotate-letter 3s ease-in-out 3 alternate;
+}
+
+@keyframes rotate-letter {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(90deg); }
+  100% { transform: rotate(0deg); }
+}
+
+code {
+	background-color: var(--sky);
+	border-radius: 3px;
+	color: var(--white);
+	margin: 0;
+	padding: .2em;
+}

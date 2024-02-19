@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Noto+Serif+JP&display=swap"
+      rel="stylesheet"
+    />
+    <title>KikeyJS</title>
+  </head>
+  <body>
+    <main id="app">
+      <h1>KikeyJS</h1>
+      <p class="intro">
+        Easy shortcut library for <a href>event handling</a>, support
+        <a href>key sequence</a>, and <a href>shortcut recording</a>.
+      </p>
+      <hr />
+      <div class="section">
+        <h2>Installation</h2>
+        <p>Append following script into HTML head.</p>
+        <pre><code>
+&lt;script src=&quot;https://code.jquery.com/jquery-3.7.1.slim.min.js&quot; integrity=&quot;sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt; </code>
+        </pre><p>Or via npm package manager.</p>
+        <pre><code>
+npm install kikey
+        </code></pre>
+        <h2>Now, Press <kbd id="getting-started">G</kbd></h2>
+        <p>Here, we instantiated a <code>kikey</code> object by calling <code>Kikey()</code> function. Register key bindings with <code>kikey.on()</code>, and remove the callback by <code>kikey.off()</code>. The key binding should always in lowercase, except for modifiers.</p>
+        <pre><code class="language-javascript">
+// Initialize kikey
+const kikey = Kikey();
+
+function typeGettingStarted() {
+  // Remove event handler
+  kikey.off(typeGettingStarted);
+  startTyping();
+}
+// Bind event handler for key `g`, notice that `shift + g` would not work
+kikey.on("g", typeGettingStarted);
+      </code></pre>
+        <h2>Add <ruby><span id="letter-M">M</span>odifiers<rp><rt>Ctrl + Alt + U</rt></rp></ruby></h2>
+        <p>We may want to add modifiers like <code>Ctrl + S</code> for saving file etc. In kikey, modifiers were represented in single uppercase letter:<ul><li><pre>C: Ctrl<pre></li><li><pre>S: Shift</pre></li><li><pre>A: Alt</pre></li><li><pre>M: Meta (Macintosh's Command Key or Windows Key)</pre></li></ul>Each key binding should concat with <code>-</code> (dash) for example, <code>A</code> for Alt, <code>S-o</code> for Shift + O, and <code>C-A-e</code> for Ctrl + Alt + e. The order of modifiers doesn't matter, but the main key should always place at rear.</p>
+        <pre><code class="language-javascript">
+// Listen to key `Ctrl+Alt+M`, mind the case
+kikey.on("C-A-m", () => {
+  // Start or stop the animation
+  $("#letter-M").classList.toggle('rotate');
+});
+      </code></pre>
+        <h2>Key Sequence</h2>
+        <p>Try press <code id="level0">Shift + S</code> → <code id="level1">E</code> → <code id="level2">Q</code>.</p>
+        <pre><code class="language-javascript">
+// Listen to key `Ctrl+Alt+U`
+kikey.on("S-s e q", () => {
+  $("#letter-M").classList.toggle('rotate');
+});
+      </code></pre>
+        <button id="start">start record</button>
+      </div>
+    </main>
+    <script type="module" src="/index.js"></script>
+  </body>
+</html>
