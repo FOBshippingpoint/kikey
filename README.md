@@ -74,8 +74,6 @@ These functions enable and disable key sequence recording, respectively.
 | Alt          | A        |
 | Meta         | M        |
 
-Kikey has four modifiers, use `-` (dash) to concat stroke together to form one key binding. E.g. `C` is a key binding, `S-o` is also a key binding, `C-S-A-M-p` is a key binding, too.
-
 KikeyJS supports four modifiers. Use a dash (`-`) to concatenate strokes to form a single key binding. For example, `C` and `S-o` are both key bindings, as is `C-S-A-M-p`.
 
 ### Special Keys
