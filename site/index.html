@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Noto+Serif+JP&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
+    <title>KikeyJS</title>
+  </head>
+  <body>
+    <main>
+      <h1><a href="https://github.com/FOBshippingpoint/kikey">KikeyJS</a></h1>
+      <p class="intro">
+        An easy-to-use shortcut library for <a href="#anchor-event-handling">event handling</a>, supporting
+        <a href="#anchor-key-sequence">key sequence</a>, and <a href="#anchor-shortcut-recording">shortcut recording</a>.
+      </p>
+      <hr />
+      <section>
+        <h2>Installation</h2>
+        <p>Include the following script in the HTML head:</p>
+        <pre><code>
+&lt;script src=&quot;https://raw.githubusercontent.com/FOBshippingpoint/kikey/master/dist/kikey.js&quot;&gt;&lt;/script&gt;
+        </code></pre>
+        <!-- We have not yet upload kikey to npm :( -->
+<!--         <p>Alternatively, install via npm package manager:</p> -->
+<!--         <pre><code> -->
+<!-- npm install kikey -->
+<!--         </code></pre> -->
+        <h2 id="anchor-event-handling">Let's Press <kbd id="getting-started">G</kbd></h2>
+        <p>Instantiate a <code>kikey</code> object by calling the <code>Kikey()</code> function. Register key bindings with <code>kikey.on()</code>, and remove the callback with <code>kikey.off()</code>. Key bindings should be in lowercase, except for modifiers.</p>
+        <pre><code class="language-javascript">
+// Initialize kikey
+const kikey = Kikey();
+// Bind event handler for the 'g' key
+kikey.on("g", typeGettingStarted);
+function typeGettingStarted() {
+  // Remove event handler
+  kikey.off(typeGettingStarted);
+  startTyping();
+}
+      </code></pre>
+        <h2>Add <ruby><span id="letter-M">M</span>odifiers<rp><rt>Ctrl + Alt + U</rt></rp></ruby></h2>
+        <p>Add modifiers like <code>Ctrl + S</code> for actions such as saving files. In KikeyJS, modifiers are represented by a single uppercase letter:<ul><li><pre>C: Ctrl<pre></li><li><pre>S: Shift</pre></li><li><pre>A: Alt</pre></li><li><pre>M: Meta (Macintosh's Command Key or Windows Key)</pre></li></ul>Each key binding should be concatenated with a <code>-</code> (dash); for example, <code>A</code> for Alt, <code>S-o</code> for Shift + O, and <code>C-A-e</code> for Ctrl + Alt + E. The order of modifiers doesn't matter, but the main key should always come last.</p>
+        <pre><code class="language-javascript">
+// Listen to the key combination 'Ctrl + Alt + U'
+kikey.on("C-A-u", () => {
+  // Start or stop the animation
+  $("#letter-M").classList.toggle('rotate');
+});
+      </code></pre>
+        <h2 id="anchor-key-sequence">Key Sequence</h2>
+        <p>Try pressing <code id="level1">Shift + S</code> → <code id="level2">E</code> → <code id="level3">Q</code>.</p>
+        <p>When listening for a key sequence, you can pass an optional third parameter in <code>kikey.on()</code> as a combo change callback. This function is called with a <code>level</code> argument, which indicates the current progress of the key sequence.</p>
+        <pre><code class="language-javascript">
+// Listen for the key sequence 'Shift + S', 'E', 'Q'
+kikey.on(
+  "S-s e q",
+  function onComplete() {
+    celebrate(); // Append with 🎉
+  },
+  // Optional argument
+  function onComboChange(level) {
+    if (level == 0) {
+      // Sequence broken
+      $("#level1").classList.remove("bright");
+      $("#level2").classList.remove("bright");
+      $("#level3").classList.remove("bright");
+    } else {
+      // Turn on the brightness for the corresponding level of key binding
+      $("#level" + level).classList.add("bright");
+    }
+  },
+);
+      </code></pre>
+        <h2 id="anchor-shortcut-recording">Shortcut Recording</h2>
+        <button id="record-btn">⏵ Start Recording</button>
+        <pre id="record-result">...</pre>
+        <p>Manually entering key sequences for setting shortcuts can be tedious for users. KikeyJS provides a hotkey recording feature, allowing users to configure custom key bindings without needing to read this documentation.</p>
+        <p>Use <code>kikey.startRecord()</code> to start recording and <code>kikey.stopRecord()</code> to stop and retrieve the result string.</p>
+        <pre><code class="language-javascript">
+let started = false;
+$("#record-btn").addEventListener("click", () => {
+  if (!started) {
+    started = true;
+    $("#record-btn").textContent = "Stop Recording";
+    $("#record-result").textContent = "Listening to your keyboard...";
+    kikey.startRecord(); // Start recording
+  } else {
+    started = false;
+    $("#record-btn").textContent = "Start Recording";
+    // Stop and return the key sequence string
+    const sequence = kikey.stopRecord();
+    $("#record-result").textContent = sequence;
+  }
+});
+      </code></pre>
+      </section>
+    </main>
+      <hr />
+    <footer><p>Made with 🤓 by <a href="https://github.com/FOBshippingpoint/">CC Lan</a> under MIT License</p><div><a href="https://github.com/FOBshippingpoint/kikey">Source Code</a></div></footer>
+    <script type="module" src="/index.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

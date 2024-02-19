@@ -1,19 +1,38 @@
 {
   "name": "kikey",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "An easy-to-use shortcut library",
+  "license": "MIT",
+  "homepage": "https://fobshippintpoint.github.io/kikey",
+  "author": "CC Lan",
+  "keywords": [
+    "shortcut",
+    "hotkey"
+  ],
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/kikey.umd.cjs",
+  "module": "./dist/kikey.js",
+  "exports": {
+    ".": {
+      "import": "./dist/kikey.js",
+      "require": "./dist/kikey.umd.cjs"
+    }
+  },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite ./site",
+    "build-site": "vite build ./site",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "devDependencies": {
     "happy-dom": "^13.3.8",
     "vite": "^5.0.8",
     "vitest": "^1.3.0"
   },
-  "dependencies": {
-    "highlight.js": "^11.9.0"
-  }
+  "dependencies": {}
 }

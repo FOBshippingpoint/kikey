@@ -88,6 +88,10 @@ export default function Kikey(targetElement) {
   let prevKey;
   let isEnabled = true;
 
+  function isModifierKey(key) {
+    return ["control", "shift", "alt", "meta"].includes(key.toLowerCase());
+  }
+
   /**
    * @param {KeyboardEvent} e
    */
@@ -96,7 +100,7 @@ export default function Kikey(targetElement) {
       return;
     }
 
-    if (e.type == "keyup") {
+    if (e.type == "keyup" && !isModifierKey(e.key)) {
       prevKey = e.key.toLowerCase();
     } else if (e.type == "keydown") {
       const key = {
@@ -123,13 +127,19 @@ export default function Kikey(targetElement) {
             bd.bindings[bd.level - 1].key == prevKey
           ) {
             bd.level++;
-            if (bd.level == binding.bindings.length) {
+            if (bd.onComboChange instanceof Function) {
+              bd.onComboChange(bd.level);
+            }
+            if (bd.level == bd.bindings.length) {
               callback();
               bd.level = 0;
             }
           }
         } else {
           // Reset binding level to zero because it breaks the order.
+          if (bd.onComboChange instanceof Function) {
+            bd.onComboChange(0);
+          }
           bd.level = 0;
         }
       }
@@ -152,19 +162,21 @@ export default function Kikey(targetElement) {
      *
      * @param {string} sequence - Key sequence.
      * @param {Function} callback - The callback function.
+     * @param {Function} onComboChange - The progress callback function.
      *
      * @example
      * on("C-s a", () => {
      *   console.log("Press Ctrl+s and release, then press a.");
      * })
      */
-    on(sequence, callback) {
+    on(sequence, callback, onComboChange = null) {
       // split by whitespace and remove empty characters
       const bindings = sequence.split(" ").filter((v) => v !== "");
       registry.set(callback, {
         bindings: bindings.map(makeBinding),
         level: 0,
         callback,
+        onComboChange,
       });
     },
     /**
@@ -211,7 +223,7 @@ export default function Kikey(targetElement) {
             key = "space";
           } else if (key == "-") {
             key = "dash";
-          } else if (["control", "shift", "alt", "meta"].includes(key)) {
+          } else if (isModifierKey(key)) {
             key = null;
           }
 
