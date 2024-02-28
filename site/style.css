@@ -7,6 +7,7 @@
   --blue: #45a8ff;
   --green: #45ff90;
   --white: #fafef8;
+  --black: #3c4043;
 }
 
 body {
@@ -139,7 +140,7 @@ button {
   background-color: var(--green);
   border: 1px solid var(--green);
   border-radius: 4px;
-  color: #3c4043;
+  color: var(--black);
   cursor: pointer;
   font-size: 14px;
   height: 36px;
@@ -175,4 +176,17 @@ footer {
   width: fit-content;
   text-align: center;
   padding: 3rem 0;
+}
+
+[data-tooltip]:hover:after,
+[data-tooltip]:active:after {
+  position: absolute;
+  background-color: var(--green);
+  border-radius: 1rem;
+  padding: 0 0.5rem;
+  margin-left: 1rem;
+  color: var(--black);
+  content: attr(data-tooltip);
+  font-size: 1rem;
+  font-weight: normal;
 }

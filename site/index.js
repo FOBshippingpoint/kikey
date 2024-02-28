@@ -10,6 +10,7 @@ const kikey = Kikey();
 kikey.on("g", typeGettingStarted);
 function typeGettingStarted() {
   kikey.off(typeGettingStarted); // Remove event handler
+  $("#getting-started").removeAttribute("data-tooltip");
   let count = 1;
   const id = setInterval(() => {
     $("#getting-started").textContent = "Getting Started!".slice(0, count++);
