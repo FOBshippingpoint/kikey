@@ -36,34 +36,38 @@ const sequence = kikey.stopRecord();
 
 ## API
 
-### f@KiKey
+### KiKey
 
 > Kikey(targetElement)
 
 Creates a KikeyJS object that listens for keypress and keyup events on the specified `targetElement`. If no element is provided, it defaults to `document`.
 
-### f@on
+### on
 
 > on(sequence: string, callback: function)
 
 Binds a key sequence to a specified callback function. When the sequence is pressed in the correct order, the callback function is triggered.
-- sequence: The key sequence, which can be **a single key**, **a combination of keys with modifiers** like Ctrl, Shift, Alt, Meta concatenated with a dash (`-`), or **a series of key bindings** separated by whitespace.
-- callback: The callback function, which does not receive any arguments.
+- `sequence`: The key sequence, which can be **a single key**, **a combination of keys with modifiers** like Ctrl, Shift, Alt, Meta concatenated with a dash (`-`), or **a series of key bindings** separated by whitespace.
+- `callback`: The callback function, which does not receive any arguments.
 
 > on(sequence: string, onComplete: function, onComboChange: function(level))
 
-onComplete: Fired when the **entire sequence** is pressed correctly.
-onComboChange (optional): A callback function for a series of key bindings. When a keyboard event is fired, onComboChange notifies the client of the current `level` of the key sequence. `level=0` indicates that the combo has been broken.
+- `onComplete`: Fired when the **entire sequence** is pressed correctly.
+- `onComboChange` (optional): A callback function for a series of key bindings. When a keyboard event is fired, `onComboChange` notifies the client of the current `combo` of the key sequence. `combo=0` indicates that the combo has been broken.
 
-### f@off
+### off
 
 > off(callback: function)
 
 Remove binding for certain callback function.
 
-### f@startRecord
-### f@stopRecord
-These functions enable and disable key sequence recording, respectively.
+### enable
+### disable
+Enable or disable the library.
+
+### startRecord
+### stopRecord
+Start or stop key sequence recording.
 
 ### Modifiers Usage
 
@@ -74,11 +78,11 @@ These functions enable and disable key sequence recording, respectively.
 | Alt          | A        |
 | Meta         | M        |
 
-KikeyJS supports four modifiers. Use a dash (`-`) to concatenate strokes to form a single key binding. For example, `C` and `S-o` are both key bindings, as is `C-S-A-M-p`.
+KikeyJS supports modifiers. Use a dash (`-`) to concatenate strokes to form a single key binding. For example, `C` and `S-o` are both key bindings, as is `C-S-A-M-p`.
 
 ### Special Keys
 
-Keys with a character length greater than 1 are classified as *Special Keys*. This includes `space` and `dash`, which are used as key sequence delimiters. Despite being single characters ` ` and `dash`, they are considered special keys.
+Keys with a character length greater than 1 are classified as *Special Keys*. This includes `space` and `dash`, which are used as key sequence delimiters.
 
 ```js
 const SPECIAL_KEYS = new Set([
