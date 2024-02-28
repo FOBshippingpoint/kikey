@@ -10,45 +10,45 @@ describe("makeBinding", () => {
   });
   test("pass legal sequence", () => {
     expect(makeBinding("C-s")).toEqual({
-      ctrl: true,
-      shift: false,
-      alt: false,
-      meta: false,
+      ctrlKey: true,
+      shiftKey: false,
+      altKey: false,
+      metaKey: false,
       key: "s",
     });
     expect(makeBinding("C-S-s")).toEqual({
-      ctrl: true,
-      shift: true,
-      alt: false,
-      meta: false,
+      ctrlKey: true,
+      shiftKey: true,
+      altKey: false,
+      metaKey: false,
       key: "s",
     });
     expect(makeBinding("space")).toEqual({
-      ctrl: false,
-      shift: false,
-      alt: false,
-      meta: false,
+      ctrlKey: false,
+      shiftKey: false,
+      altKey: false,
+      metaKey: false,
       key: " ",
     });
     expect(makeBinding("dash")).toEqual({
-      ctrl: false,
-      shift: false,
-      alt: false,
-      meta: false,
+      ctrlKey: false,
+      shiftKey: false,
+      altKey: false,
+      metaKey: false,
       key: "-",
     });
     expect(makeBinding("A-M-dash")).toEqual({
-      ctrl: false,
-      shift: false,
-      alt: true,
-      meta: true,
+      ctrlKey: false,
+      shiftKey: false,
+      altKey: true,
+      metaKey: true,
       key: "-",
     });
     expect(makeBinding("escape")).toEqual({
-      ctrl: false,
-      shift: false,
-      alt: false,
-      meta: false,
+      ctrlKey: false,
+      shiftKey: false,
+      altKey: false,
+      metaKey: false,
       key: "escape",
     });
   });
@@ -56,7 +56,7 @@ describe("makeBinding", () => {
 
 describe("keykey", () => {
   // helper
-  function fire(type, { c, s, a, m, k }) {
+  function fire(type, { c = false, s = false, a = false, m = false, k }) {
     document.dispatchEvent(
       new KeyboardEvent(type, {
         ctrlKey: c,
@@ -146,6 +146,14 @@ describe("keykey", () => {
     k.on("S-A-s a", callback);
     keydown({ s: true, a: true, k: "s" });
     keyup({ k: "s" });
+    expect(callback).not.toHaveBeenCalled();
+    keydown({ k: "a" });
+    expect(callback).toHaveBeenCalled();
+
+    callback = vi.fn();
+    k.on("C a", callback);
+    keydown({ c: true, k: "control" });
+    keyup({ k: "control" });
     expect(callback).not.toHaveBeenCalled();
     keydown({ k: "a" });
     expect(callback).toHaveBeenCalled();

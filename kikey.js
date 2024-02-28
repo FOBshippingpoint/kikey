@@ -32,45 +32,42 @@ const SPECIAL_KEYS = new Set([
 ]);
 
 /**
- * @param {string} sequence - key sequence, e.g. 「C-s」 or 「a」
+ * @param {string} binding - key binding string, e.g. 「C-s」 or 「a」
  */
-export function makeBinding(sequence) {
-  const b = {
-    ctrl: false,
-    shift: false,
-    alt: false, // Option key on Macintosh
-    meta: false, // Command key on Macintosh
-    key: sequence[sequence.length - 1],
-  };
+export function makeBinding(binding) {
+  let ctrlKey = false,
+    shiftKey = false,
+    altKey = false,
+    metaKey = false,
+    key;
 
-  for (const c of sequence.split("-")) {
+  for (const c of binding.split("-")) {
     if (c.length == 1) {
-      b.ctrl = c == "C" || b.ctrl;
-      b.shift = c == "S" || b.shift;
-      b.alt = c == "A" || b.alt;
-      b.meta = c == "M" || b.meta;
+      ctrlKey = c == "C" || ctrlKey;
+      shiftKey = c == "S" || shiftKey;
+      altKey = c == "A" || altKey;
+      metaKey = c == "M" || metaKey;
+      key = c;
     } else if (SPECIAL_KEYS.has(c)) {
-      b.key = c === "space" ? " " : c === "dash" ? "-" : c;
+      key = c == "space" ? " " : c == "dash" ? "-" : c;
+    } else {
+      throw Error("Invalid binding.");
     }
   }
 
-  if (b.key === undefined || sequence[sequence.length - 1] === "-") {
-    throw Error("Invalid binding sequence.");
-  }
-
-  if (sequence.length == 1) {
-    if (b.ctrl) {
-      b.key = "control";
-    } else if (b.shift) {
-      b.key = "shift";
-    } else if (b.alt) {
-      b.key = "alt";
-    } else if (b.meta) {
-      b.key = "meta";
+  if (binding.length == 1) {
+    if (ctrlKey) {
+      key = "control";
+    } else if (shiftKey) {
+      key = "shift";
+    } else if (altKey) {
+      key = "alt";
+    } else if (metaKey) {
+      key = "meta";
     }
   }
 
-  return b;
+  return { ctrlKey, shiftKey, altKey, metaKey, key };
 }
 
 /**
@@ -83,9 +80,11 @@ export default function Kikey(targetElement) {
   if (!targetElement) {
     targetElement = document;
   }
+
   const registry = new Map();
 
   let prevKey;
+  let prevMod;
   let isEnabled = true;
 
   function isModifierKey(key) {
@@ -96,52 +95,42 @@ export default function Kikey(targetElement) {
    * @param {KeyboardEvent} e
    */
   function handleKeyEvent(e) {
-    if (!isEnabled) {
-      return;
-    }
+    if (!isEnabled) return;
 
     if (e.type == "keyup" && !isModifierKey(e.key)) {
       prevKey = e.key.toLowerCase();
     } else if (e.type == "keydown") {
-      const key = {
-        ctrl: e.ctrlKey,
-        shift: e.shiftKey,
-        alt: e.altKey,
-        meta: e.metaKey,
-        key: e.key.toLowerCase(),
-      };
+      const { ctrlKey, shiftKey, altKey, metaKey } = e;
+      const key = e.key.toLowerCase();
 
       for (const [callback, binding] of registry.entries()) {
-        const bd = binding;
-        const b = bd.bindings[bd.level];
+        const { onComboChange, combo, bindings } = binding;
+        const b = bindings[combo];
         if (
-          b.ctrl == key.ctrl &&
-          b.shift == key.shift &&
-          b.alt == key.alt &&
-          key.key == b.key
+          b.ctrlKey == ctrlKey &&
+          b.shiftKey == shiftKey &&
+          b.altKey == altKey &&
+          b.metaKey == metaKey &&
+          b.key == key &&
+          (combo == 0 ||
+            bindings[combo - 1].key == prevKey ||
+            bindings[combo - 1].key == prevMod)
         ) {
-          if (bd.bindings.length == 1) {
+          binding.combo++;
+          onComboChange instanceof Function && onComboChange(binding.combo);
+          if (binding.combo == bindings.length) {
             callback();
-          } else if (
-            bd.level == 0 ||
-            bd.bindings[bd.level - 1].key == prevKey
-          ) {
-            bd.level++;
-            if (bd.onComboChange instanceof Function) {
-              bd.onComboChange(bd.level);
-            }
-            if (bd.level == bd.bindings.length) {
-              callback();
-              bd.level = 0;
-            }
+            binding.combo = 0;
           }
         } else {
-          // Reset binding level to zero because it breaks the order.
-          if (bd.onComboChange instanceof Function) {
-            bd.onComboChange(0);
-          }
-          bd.level = 0;
+          // Reset binding combo to zero because it breaks the order.
+          onComboChange(combo);
+          binding.combo = 0;
         }
+      }
+
+      if (isModifierKey(e.key)) {
+        prevMod = e.key;
       }
     }
   }
@@ -165,17 +154,18 @@ export default function Kikey(targetElement) {
      * @param {Function} onComboChange - The progress callback function.
      *
      * @example
-     * on("C-s a", () => {
+     * kikey.on("C-s a", () => {
      *   console.log("Press Ctrl+s and release, then press a.");
      * })
      */
-    on(sequence, callback, onComboChange = null) {
+    on(sequence, callback = () => {}, onComboChange = () => {}) {
       // split by whitespace and remove empty characters
-      const bindings = sequence.split(" ").filter((v) => v !== "");
+      const bindings = sequence.split(" ").filter((v) => v !== "").map(
+        makeBinding,
+      );
       registry.set(callback, {
-        bindings: bindings.map(makeBinding),
-        level: 0,
-        callback,
+        bindings,
+        combo: 0,
         onComboChange,
       });
     },
@@ -186,39 +176,46 @@ export default function Kikey(targetElement) {
       registry.delete(callback);
     },
     /**
-     * Enable kikey
+     * Enable kikey.
      */
     enable() {
       isEnabled = true;
     },
     /**
-     * Disable kikey
+     * Disable kikey.
      */
     disable() {
       isEnabled = false;
     },
+    /**
+     * Start recording shortcut.
+     */
     startRecord() {
       targetElement.addEventListener("keydown", pushEvent);
       targetElement.addEventListener("keyup", pushEvent);
     },
+    /**
+     * Stop recording shortcut.
+     */
     stopRecord() {
       // Clean up
       targetElement.removeEventListener("keydown", pushEvent);
       targetElement.removeEventListener("keyup", pushEvent);
 
-      let sequence = [];
-      for (let i = 0; i < record.length; i++) {
-        const slow = record[i];
-        const fast = i == record.length - 1 ? null : record[i + 1];
-        if (slow.type == "keydown" && (fast === null || fast.type == "keyup")) {
-          let b = "";
-          b += slow.ctrlKey ? "C" : "";
-          b += slow.shiftKey ? "S" : "";
-          b += slow.altKey ? "A" : "";
-          b += slow.metaKey ? "M" : "";
+      const sequence = [];
+      let slow = 0;
+      let fast = 1;
+      while (slow < record.length) {
+        const slowKey = record[slow];
+        if (slowKey.type == "keydown" && record.at(fast)?.type == "keyup") {
+          let b = slowKey.ctrlKey ? "C" : "";
+          b += slowKey.shiftKey ? "S" : "";
+          b += slowKey.altKey ? "A" : "";
+          b += slowKey.metaKey ? "M" : "";
           b = b.split("").join("-");
 
-          let key = slow.key.toLowerCase();
+          let key = slowKey.key.toLowerCase();
+
           if (key == " ") {
             key = "space";
           } else if (key == "-") {
@@ -226,7 +223,6 @@ export default function Kikey(targetElement) {
           } else if (isModifierKey(key)) {
             key = null;
           }
-
           if (b.length > 0 && key) {
             // Combination
             b += "-" + key;
@@ -236,6 +232,8 @@ export default function Kikey(targetElement) {
           }
           sequence.push(b);
         }
+        slow++;
+        fast++;
       }
       record = [];
       return sequence.join(" ");
