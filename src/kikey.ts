@@ -1,43 +1,116 @@
-import { makeBinding } from "./makeBinding";
+import { makeBinding, KeyBinding } from "./makeBinding";
 
 /**
- * The key binding.
- * 
- * For example, `Ctrl + S` or `Alt + Shift + K`.
+ * Represents a registry of key bindings.
+ * @internal
  */
-export interface KeyBinding {
-  ctrlKey: boolean;
-  shiftKey: boolean;
-  altKey: boolean;
-  metaKey: boolean;
-  key: string;
-}
-
 interface KeyBindingRegistry {
   bindings: KeyBinding[];
   combo: number;
   onComboChange: (combo: number) => void;
 }
 
-interface KikeyInstance {
-  on: (
+/**
+ * The Kikey instance interface for managing keyboard shortcuts.
+ * @public
+ */
+interface Kikey {
+  /**
+   * Registers a callback for a specified key sequence.
+   *
+   * @param sequence - The key sequence (e.g., "C-s a" for Ctrl+S followed by "a").
+   * @param callback - The function to be called when the key sequence is detected.
+   * @param onComboChange - The function to be called when the key sequence progresses.
+   *
+   * @example
+   * ```typescript
+   * kikey.on("C-s a", () => {
+   *   console.log("Pressed Ctrl+S, then 'a'");
+   * }, (combo) => {
+   *   console.log(`Combo progress: ${combo}`);
+   * });
+   * ```
+   */
+  on(
     sequence: string,
     callback?: () => void,
     onComboChange?: (combo: number) => void,
-  ) => void;
-  off: (callback: () => void) => void;
-  enable: () => void;
-  disable: () => void;
-  startRecord: () => void;
-  stopRecord: () => string;
+  ): void;
+
+  /**
+   * Unregisters a callback.
+   *
+   * @param callback - The callback function to remove.
+   *
+   * @example
+   * ```typescript
+   * const notice = () => alert("You pressed Ctrl+S");
+   * kikey.on("C-s", notice);
+   * kikey.off(notice);
+   * ```
+   */
+  off(callback: () => void): void;
+
+  /**
+   * Enables the Kikey instance to start listening for keyboard events.
+   */
+  enable(): void;
+
+  /**
+   * Disables the Kikey instance from listening to keyboard events.
+   */
+  disable(): void;
+
+  /**
+   * Starts recording keyboard events.
+   *
+   * @example
+   * ```typescript
+   * kikey.startRecord();
+   * // User presses key strokes...
+   * const sequence = kikey.stopRecord();
+   * console.log(`Recorded sequence: ${sequence}`);
+   * ```
+   */
+  startRecord(): void;
+
+  /**
+   * Stops recording keyboard events and returns the recorded key sequence.
+   *
+   * @returns The recorded key sequence.
+   *
+   * @example
+   * ```typescript
+   * kikey.startRecord();
+   * // User presses key strokes...
+   * const sequence = kikey.stopRecord();
+   * console.log(`Recorded sequence: ${sequence}`);
+   * ```
+   */
+  stopRecord(): string;
 }
 
 /**
- * @param {HTMLElement} targetElement
+ * Creates a KikeyJS object that listens for keypress and keyup events on the specified `targetElement`.
+ * If no element is provided, it defaults to `document`.
+ *
+ * @param targetElement - The target element to listen for keyboard events. Defaults to the entire document if not specified.
+ * @returns An instance of Kikey with methods to manage keyboard shortcuts.
+ * @throws Throws an error if the environment is not a browser.
+ *
+ * @example
+ * ```typescript
+ * import Kikey from "kikey";
+ *
+ * const kikey = Kikey();
+ * kikey.on("C-s", () => alert("You pressed Ctrl+S"));
+ * ```
+ *
+ * @public
  */
-export default function Kikey(
+export default function createKikeyInst(
   targetElement?: HTMLElement | Document,
-): KikeyInstance {
+): Kikey {
   if (typeof document === "undefined") {
     throw Error("Only support browser environment.");
   }
@@ -110,20 +183,6 @@ export default function Kikey(
   };
 
   return {
-    /**
-     * Listen on certain key sequence.
-     *
-     * Key sequence can be a single key, or combination of keys deliminated by '-' (dash).
-     *
-     * @param {string} sequence - Key sequence.
-     * @param {Function} callback - The callback function.
-     * @param {Function} onComboChange - The progress callback function.
-     *
-     * @example
-     * kikey.on("C-s a", () => {
-     *   console.log("Press Ctrl+s and release, then press a.");
-     * })
-     */
     on(
       sequence: string,
       callback: () => void = () => {},
@@ -140,27 +199,15 @@ export default function Kikey(
         onComboChange,
       });
     },
-    /**
-     * Remove the callback.
-     */
     off(callback: () => void): void {
       registry.delete(callback);
     },
-    /**
-     * Enable kikey.
-     */
     enable(): void {
       isEnabled = true;
     },
-    /**
-     * Disable kikey.
-     */
     disable(): void {
       isEnabled = false;
     },
-    /**
-     * Start recording shortcut.
-     */
     startRecord(): void {
       targetElement!.addEventListener(
         "keydown",
@@ -168,9 +215,6 @@ export default function Kikey(
       );
       targetElement!.addEventListener("keyup", pushEvent as (e: Event) => void);
     },
-    /**
-     * Stop recording shortcut.
-     */
     stopRecord(): string {
       // Clean up
       targetElement!.removeEventListener(

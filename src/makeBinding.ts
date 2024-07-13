@@ -39,3 +39,17 @@ export function makeBinding(binding: string): KeyBinding {
 
   return { ctrlKey, shiftKey, altKey, metaKey, key };
 }
+
+/**
+ * The key binding.
+ * 
+ * For example, `Ctrl + S` or `Alt + Shift + K`.
+ */
+export interface KeyBinding {
+  ctrlKey: boolean;
+  shiftKey: boolean;
+  altKey: boolean;
+  metaKey: boolean;
+  key: string;
+}
+
