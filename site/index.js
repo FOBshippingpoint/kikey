@@ -1,4 +1,4 @@
-import Kikey from "../dist/kikey.js";
+import Kikey from "../src/kikey";
 import "./style.css";
 
 function $(selectors) {
@@ -6,6 +6,8 @@ function $(selectors) {
 }
 
 const kikey = Kikey();
+// Expose kikey to let guests play with it.
+window.kikey = kikey;
 
 kikey.on("g", typeGettingStarted);
 function typeGettingStarted() {
