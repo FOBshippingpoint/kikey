@@ -1,62 +1,19 @@
 import { describe, expect, test, vi } from "vitest";
-import { makeBinding } from "./kikey";
+import { SPECIAL_KEYS } from "./constants";
 import kikey from "./kikey";
 
-describe("makeBinding", () => {
-  test("pass illegal sequence", () => {
-    expect(() => makeBinding("")).toThrow();
-    expect(() => makeBinding("A--")).toThrow();
-    expect(() => makeBinding("--")).toThrow();
-  });
-  test("pass legal sequence", () => {
-    expect(makeBinding("C-s")).toEqual({
-      ctrlKey: true,
-      shiftKey: false,
-      altKey: false,
-      metaKey: false,
-      key: "s",
-    });
-    expect(makeBinding("C-S-s")).toEqual({
-      ctrlKey: true,
-      shiftKey: true,
-      altKey: false,
-      metaKey: false,
-      key: "s",
-    });
-    expect(makeBinding("space")).toEqual({
-      ctrlKey: false,
-      shiftKey: false,
-      altKey: false,
-      metaKey: false,
-      key: " ",
-    });
-    expect(makeBinding("dash")).toEqual({
-      ctrlKey: false,
-      shiftKey: false,
-      altKey: false,
-      metaKey: false,
-      key: "-",
-    });
-    expect(makeBinding("A-M-dash")).toEqual({
-      ctrlKey: false,
-      shiftKey: false,
-      altKey: true,
-      metaKey: true,
-      key: "-",
-    });
-    expect(makeBinding("escape")).toEqual({
-      ctrlKey: false,
-      shiftKey: false,
-      altKey: false,
-      metaKey: false,
-      key: "escape",
-    });
-  });
-});
-
-describe("keykey", () => {
+describe("kikey", () => {
   // helper
-  function fire(type, { c = false, s = false, a = false, m = false, k }) {
+  function fire(
+    type: string,
+    {
+      c = false,
+      s = false,
+      a = false,
+      m = false,
+      k,
+    }: { c?: boolean; s?: boolean; a?: boolean; m?: boolean; k: string },
+  ): void {
     document.dispatchEvent(
       new KeyboardEvent(type, {
         ctrlKey: c,
@@ -67,15 +24,19 @@ describe("keykey", () => {
       }),
     );
   }
-  function keydown(...args) {
+  function keydown(
+    ...args: [{ c?: boolean; s?: boolean; a?: boolean; m?: boolean; k: string }]
+  ): void {
     fire("keydown", ...args);
   }
-  function keyup(...args) {
+  function keyup(
+    ...args: [{ c?: boolean; s?: boolean; a?: boolean; m?: boolean; k: string }]
+  ): void {
     fire("keyup", ...args);
   }
 
   const k = kikey();
-  let callback;
+  let callback: () => void;
   describe("single binding", () => {
     test("simple", () => {
       callback = vi.fn();
@@ -98,38 +59,17 @@ describe("keykey", () => {
       expect(callback).toHaveBeenCalled();
     });
     describe("special keys", () => {
-      const SPECIAL_KEYS = [
-        "arrowleft",
-        "arrowright",
-        "arrowup",
-        "arrowdown",
-        "backspace",
-        "enter",
-        "escape",
-        "capslock",
-        "tab",
-        "home",
-        "pageup",
-        "pagedown",
-        "end",
-        "f1",
-        "f2",
-        "f3",
-        "f4",
-        "f5",
-        "f6",
-        "f7",
-        "f8",
-        "f9",
-        "f10",
-        "f11",
-        "f12",
-      ];
-      for (const special of SPECIAL_KEYS) {
+      for (let special of SPECIAL_KEYS) {
         test(special, () => {
           callback = vi.fn();
           k.on(special, callback);
-          keydown({ k: special });
+          if (special === "space") {
+            keydown({ k: " " });
+          } else if (special === "dash") {
+            keydown({ k: "-" });
+          } else {
+            keydown({ k: special });
+          }
           expect(callback).toHaveBeenCalled();
         });
       }

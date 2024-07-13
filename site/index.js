@@ -1,4 +1,4 @@
-import Kikey from "../kikey.js";
+import Kikey from "../dist/kikey.js";
 import "./style.css";
 
 function $(selectors) {

@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, "kikey.js"),
+      entry: resolve(__dirname, "src/kikey.ts"),
       name: "kikey",
       fileName: "kikey",
     },
