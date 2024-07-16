@@ -9,6 +9,7 @@ export default defineConfig({
       fileName: "kikey",
       formats: ["umd"],
     },
+    outDir: "dist/umd" // unpkg required
   },
   test: {
     environment: "happy-dom",
