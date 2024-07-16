@@ -9,7 +9,7 @@ For an interactive introduction, visit the KikeyJS homepage: https://fobshipping
 To integrate KikeyJS into your project, add the following snippet to your HTML header:
 
 ```html
-<script src="https://raw.githubusercontent.com/FOBshippingpoint/kikey/main/dist/kikey.js"></script>
+<script src="https://unpkg.com/kikey/kikey.umd.cjs"></script>
 ```
 
 ## Usage

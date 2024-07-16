@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - site
 
 jobs:
 
@@ -37,7 +39,7 @@ jobs:
       - name: Test
         run: npm run test
 
-  publish:
+  publish-jsr:
     needs:
       - check
       - test
@@ -51,3 +53,25 @@ jobs:
         uses: actions/checkout@v4
       - name: Publish
         run: npx jsr publish
+
+  publish-npm:
+    needs:
+      - check
+      - test
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
