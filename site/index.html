@@ -25,15 +25,21 @@
       <hr />
       <section>
         <h2>Installation</h2>
-        <p>Include the following script in the HTML head:</p>
+        <p>Option 1: Include the following script in the HTML head:</p>
         <pre><code>
 &lt;script src=&quot;https://unpkg.com/kikey/dist/umd/kikey.umd.cjs&quot;&gt;&lt;/script&gt;
         </code></pre>
-        <!-- We have not yet upload kikey to npm :( -->
-<!--         <p>Alternatively, install via npm package manager:</p> -->
-<!--         <pre><code> -->
-<!-- npm install kikey -->
-<!--         </code></pre> -->
+        <p>Option 2: Use ECMAScript modules</p>
+        <pre><code>
+&lt;script type=&quot;module&quot;&gt;
+  import Kikey from &quot;https://unpkg.com/kikey/dist/index.js&quot;
+&lt;/script&gt;
+        </code></pre>
+        <p>Option 3: Via npm or jsr</p>
+        <pre><code>
+npm install kikey
+deno add @cclan/kikey
+        </code></pre>
         <h2 id="anchor-event-handling">Let's Press <kbd id="getting-started" data-tooltip="Please press the “g” key without shift.">G</kbd></h2>
         <p>Instantiate a <code>kikey</code> object by calling the <code>Kikey()</code> function. Register key bindings with <code>kikey.on()</code>, and remove the callback with <code>kikey.off()</code>. Key bindings should be in lowercase, except for modifiers.</p>
         <pre><code class="language-javascript">
