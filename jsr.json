@@ -1,12 +1,5 @@
 {
   "name": "@cclan/kikey",
-  "version": "0.1.3",
-  "description": "An easy-to-use shortcut library",
-  "exports": "./src/kikey.ts",
-  "publish": {
-    "exclude": [
-      "src/**/*.test.ts",
-      "site"
-    ]
-  }
+  "version": "1.0.0",
+  "exports": "./src/index.ts"
 }

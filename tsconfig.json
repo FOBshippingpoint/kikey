@@ -1,7 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "es2015",
+    "module": "es2015",
     "lib": ["esnext", "dom"],
-    "moduleResolution": "node"
-  }
+    "declaration": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist"
+  },
+  "include": [
+    "src"
+  ]
 }

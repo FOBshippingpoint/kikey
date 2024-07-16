@@ -1,8 +1,8 @@
 {
   "name": "kikey",
   "private": true,
-  "version": "0.1.0",
-  "description": "An easy-to-use shortcut library",
+  "version": "1.0.0",
+  "description": "An easy-to-use shortcut library.",
   "license": "MIT",
   "homepage": "https://fobshippintpoint.github.io/kikey",
   "author": "CC Lan",
@@ -10,27 +10,30 @@
     "shortcut",
     "hotkey"
   ],
-  "type": "module",
+  "scripts": {
+    "dev": "vite site",
+    "build-site": "vite build site",
+    "preview": "vite preview",
+    "test": "vitest",
+    "format": "biome format --write src test",
+    "lint": "biome lint --write src test",
+    "check": "biome check --write src test",
+    "build": "tsc"
+  },
   "files": [
     "dist"
   ],
-  "main": "./dist/kikey.umd.cjs",
-  "module": "./dist/kikey.js",
+  "type": "module",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/kikey.js",
-      "require": "./dist/kikey.umd.cjs"
-    }
-  },
-  "scripts": {
-    "dev": "vite ./site",
-    "build-site": "vite build ./site",
-    "build": "vite build",
-    "preview": "vite preview",
-    "test": "vitest"
+    ".": "./dist/index.js"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.8.3",
     "happy-dom": "^13.3.8",
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.3",
     "vite": "^5.0.8",
     "vitest": "^1.3.0"
   },
