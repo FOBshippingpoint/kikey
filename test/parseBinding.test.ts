@@ -1,49 +1,49 @@
 import { describe, expect, test } from "vitest";
-import { makeBinding } from "../src/makeBinding";
+import { parseBinding } from "../src/parseBinding";
 
-describe("makeBinding", () => {
+describe("parseBinding", () => {
 	test("pass illegal sequence", () => {
-		expect(() => makeBinding("")).toThrow();
-		expect(() => makeBinding("A--")).toThrow();
-		expect(() => makeBinding("--")).toThrow();
+		expect(() => parseBinding("")).toThrow();
+		expect(() => parseBinding("A--")).toThrow();
+		expect(() => parseBinding("--")).toThrow();
 	});
 	test("pass legal sequence", () => {
-		expect(makeBinding("C-s")).toEqual({
+		expect(parseBinding("C-s")).toEqual({
 			ctrlKey: true,
 			shiftKey: false,
 			altKey: false,
 			metaKey: false,
 			key: "s",
 		});
-		expect(makeBinding("C-S-s")).toEqual({
+		expect(parseBinding("C-S-s")).toEqual({
 			ctrlKey: true,
 			shiftKey: true,
 			altKey: false,
 			metaKey: false,
 			key: "s",
 		});
-		expect(makeBinding("space")).toEqual({
+		expect(parseBinding("space")).toEqual({
 			ctrlKey: false,
 			shiftKey: false,
 			altKey: false,
 			metaKey: false,
 			key: " ",
 		});
-		expect(makeBinding("dash")).toEqual({
+		expect(parseBinding("dash")).toEqual({
 			ctrlKey: false,
 			shiftKey: false,
 			altKey: false,
 			metaKey: false,
 			key: "-",
 		});
-		expect(makeBinding("A-M-dash")).toEqual({
+		expect(parseBinding("A-M-dash")).toEqual({
 			ctrlKey: false,
 			shiftKey: false,
 			altKey: true,
 			metaKey: true,
 			key: "-",
 		});
-		expect(makeBinding("escape")).toEqual({
+		expect(parseBinding("escape")).toEqual({
 			ctrlKey: false,
 			shiftKey: false,
 			altKey: false,

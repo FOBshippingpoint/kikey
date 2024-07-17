@@ -3,7 +3,7 @@ import { SPECIAL_KEYS } from "./constants";
 /**
  * @param {string} binding - key binding string, e.g. 「C-s」 or 「a」
  */
-export function makeBinding(binding: string): KeyBinding {
+export function parseBinding(binding: string): KeyBinding {
 	let ctrlKey = false;
 	let shiftKey = false;
 	let altKey = false;
