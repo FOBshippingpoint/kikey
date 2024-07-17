@@ -25,14 +25,14 @@
       <hr />
       <section>
         <h2>Installation</h2>
-        <p>Option 1: Include the following script in the HTML head:</p>
+        <p>Option 1: Use UMD (Universal Module Definition)</p>
         <pre><code>
-&lt;script src=&quot;https://unpkg.com/kikey/dist/umd/kikey.umd.cjs&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/kikey/dist/umd/kikey.min.js&quot;&gt;&lt;/script&gt;
         </code></pre>
         <p>Option 2: Use ECMAScript modules</p>
         <pre><code>
 &lt;script type=&quot;module&quot;&gt;
-  import Kikey from &quot;https://unpkg.com/kikey/dist/index.js&quot;
+  import { createKikey } from &quot;https://unpkg.com/kikey/dist/index.js&quot;
 &lt;/script&gt;
         </code></pre>
         <p>Option 3: Via npm or jsr</p>
@@ -41,10 +41,10 @@ npm install kikey
 deno add @cclan/kikey
         </code></pre>
         <h2 id="anchor-event-handling">Let's Press <kbd id="getting-started" data-tooltip="Please press the “g” key without shift.">G</kbd></h2>
-        <p>Instantiate a <code>kikey</code> object by calling the <code>Kikey()</code> function. Register key bindings with <code>kikey.on()</code>, and remove the callback with <code>kikey.off()</code>. Key bindings should be in lowercase, except for modifiers.</p>
+        <p>Instantiate a <code>kikey</code> object by calling the <code>Kikey.createKikey()</code> function. Register key bindings with <code>kikey.on()</code>, and remove the callback with <code>kikey.off()</code>. Key bindings should be in lowercase, except for modifiers.</p>
         <pre><code class="language-javascript">
 // Initialize kikey
-const kikey = Kikey();
+const kikey = Kikey.createKikey();
 // Bind event handler for the 'g' key
 kikey.on("g", typeGettingStarted);
 function typeGettingStarted() {
@@ -109,7 +109,8 @@ $("#record-btn").addEventListener("click", () => {
 });
       </code></pre>
         <h2>Try it yourself</h2>
-        <div style="padding-bottom: 2em">Now, try it yourself using the browser dev console! Had no idea? How about <code>kikey.on("C-A-s", () => alert("Ctrl + Alt + S pressed!"))</code></div>
+        <div>Now, try it yourself using the browser dev console! Had no idea? How about <code>kikey.on("C-A-s", () => alert("Ctrl + Alt + S pressed!"))</code></div>
+        <h2><a href="https://github.com/FOBshippingpoint/kikey?tab=readme-ov-file#kikeyjs">API Reference</a>👋</h2>
       </section>
     </main>
       <hr />

@@ -1,6 +1,6 @@
 {
   "name": "kikey",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "An easy-to-use shortcut library.",
   "license": "MIT",
   "homepage": "https://fobshippintpoint.github.io/kikey",
@@ -18,7 +18,7 @@
     "lint": "biome lint --write src test",
     "check": "biome check --write src test",
     "build:esm": "tsc",
-    "build:umd": "vite build",
+    "build:umd": "vite build && mv ./dist/umd/kikey.umd.cjs ./dist/umd/kikey.min.js",
     "build": "npm run build:umd && npm run build:esm"
   },
   "files": [

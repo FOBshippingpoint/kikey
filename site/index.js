@@ -1,11 +1,11 @@
-import Kikey from "../src/index";
+import { createKikey } from "../src/index";
 import "./style.css";
 
 function $(selectors) {
   return document.querySelector(selectors);
 }
 
-const kikey = Kikey();
+const kikey = createKikey();
 // Expose kikey to let guests play with it.
 window.kikey = kikey;
 
