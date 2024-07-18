@@ -43,7 +43,7 @@ describe("kikey", () => {
 			expect(callback).toHaveBeenCalled();
 			k.off(callback);
 			keydown({ c: true, k: "s" });
-			expect(callback).toHaveBeenCalledTimes(1);
+			expect(callback).toHaveBeenCalledOnce();
 		});
 		test("symbol", () => {
 			callback = vi.fn();
@@ -121,6 +121,14 @@ describe("kikey", () => {
 		keydown({ k: "b" });
 		keydown({ k: "c" });
 		expect(callback).not.toHaveBeenCalled();
+	});
+
+	test("once", () => {
+		callback = vi.fn();
+		k.once("a", callback);
+		keydown({ k: "a" });
+		keydown({ k: "a" });
+		expect(callback).toHaveBeenCalledOnce();
 	});
 
 	test("exception on client callback", () => {

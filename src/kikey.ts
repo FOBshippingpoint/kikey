@@ -52,6 +52,26 @@ export interface Kikey {
 	off(callback: () => void): void;
 
 	/**
+	 * Registers a one-time callback for a specified key sequence.
+	 *
+	 * @param sequence - The key sequence (e.g., "C-s a" for Ctrl+S followed by "a").
+	 * @param callback - The function to be called when the key sequence is detected.
+	 * @param onComboChange - The function to be called when the key sequence progresses.
+	 *
+	 * @example
+	 * ```typescript
+	 * kikey.once("C-x", () => {
+	 *   console.log("This is a one-time message");
+	 * });
+	 * ```
+	 */
+	once(
+		sequence: string,
+		callback?: () => void,
+		onComboChange?: (combo: number) => void,
+	): void;
+
+	/**
 	 * Enables the Kikey instance to start listening for keyboard events.
 	 */
 	enable(): void;
@@ -197,6 +217,17 @@ export function createKikey(targetElement?: HTMLElement | Document): Kikey {
 		},
 		off(callback: () => void): void {
 			registry.delete(callback);
+		},
+		once(
+			sequence: string,
+			callback: () => void = () => {},
+			onComboChange: (combo: number) => void = () => {},
+		): void {
+			const cb = () => {
+				this.off(cb);
+				callback();
+			};
+			this.on(sequence, cb, onComboChange);
 		},
 		enable(): void {
 			isEnabled = true;
