@@ -32,8 +32,11 @@ deno add @cclan/kikey
 
 KikeyJS provides a very simple API for key binding, event handling, and recording:
 ```js
-// If you use UMD
+// If you use UMD ↓
 const kikey = Kikey.createKikey();
+// If you use ES Module ↓
+// import { createKikey } from "kikey"
+// const kikey = createKikey();
 
 // Key registration
 const notice = () => alert("You pressed Ctrl+S");
