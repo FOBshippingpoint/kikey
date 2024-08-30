@@ -1,5 +1,5 @@
 /**
  * @module
  */
-export { parseBinding } from "./parseBinding";
-export { createKikey } from "./kikey";
+export { parseBinding } from "./parseBinding.js";
+export { createKikey } from "./kikey.js";

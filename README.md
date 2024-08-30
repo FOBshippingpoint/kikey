@@ -7,18 +7,34 @@ For an interactive introduction, visit the KikeyJS homepage: https://fobshipping
 
 KikeyJS provides UMD and ES Module formats.
 
-### Option 1: Use UMD (Universal Module Definition)
+### Option 1: Use UMD
 
 ```html
-<script src="https://unpkg.com/kikey/dist/umd/kikey.min.js"></script>
+<!doctype html>
+<html>
+  <head>
+    <script src="https://unpkg.com/kikey/dist/umd/kikey.min.js"></script>
+  </head>
+  <body>
+    <script>
+      const kikey = Kikey.createKikey();
+    </script>
+  </body>
+</html>
 ```
 
-### Option 2: Use ECMAScript modules
+### Option 2: Use ES Module
 
 ```html
-<script type="module">
-  import { createKikey } from "https://unpkg.com/kikey/dist/index.js"
-</script>
+<!doctype html>
+<html>
+  <body>
+    <script type="module">
+      import { createKikey } from "https://unpkg.com/kikey/dist/index.js";
+      const kikey = createKikey();
+    </script>
+  </body>
+</html>
 ```
 
 ### Option 3: Via npm or jsr
@@ -32,12 +48,6 @@ deno add @cclan/kikey
 
 KikeyJS provides a very simple API for key binding, event handling, and recording:
 ```js
-// If you use UMD ↓
-const kikey = Kikey.createKikey();
-// If you use ES Module ↓
-// import { createKikey } from "kikey"
-// const kikey = createKikey();
-
 // Key registration
 const notice = () => alert("You pressed Ctrl+S");
 kikey.on("C-s", notice);
@@ -78,6 +88,10 @@ const sequence = kikey.stopRecord();
 #### once(sequence: string, onComplete: function, onComboChange: function(level))
 
 &emsp;&emsp;A one-time version of `on`.
+
+#### updateSequence(newSequence: string, callback: function)
+
+&emsp;&emsp;Update key sequence by callback.
 
 #### enable()
 
