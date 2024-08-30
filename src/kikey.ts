@@ -5,10 +5,10 @@ import { type KeyBinding, parseBinding } from "./parseBinding.js";
  * @internal
  */
 interface KeyBindingRegistry {
-  bindings: KeyBinding[];
-  callback: KikeyCallback;
-  combo: number;
-  onComboChange: (combo: number) => void;
+	bindings: KeyBinding[];
+	callback: KikeyCallback;
+	combo: number;
+	onComboChange: (combo: number) => void;
 }
 
 type KikeyCallback = (e: KeyboardEvent) => void;
@@ -18,145 +18,145 @@ type KikeyCallback = (e: KeyboardEvent) => void;
  * @public
  */
 export interface Kikey {
-  /**
-   * Registers a callback for a specified key sequence.
-   *
-   * @param sequence - The key sequence (e.g., "C-s a" for Ctrl+S followed by "a").
-   * @param callback - The function to be called when the key sequence is detected.
-   * @param onComboChange - The function to be called when the key sequence progresses.
-   *
-   * @example
-   * ```typescript
-   * kikey.on("C-s a", () => {
-   *   console.log("Pressed Ctrl+S, then 'a'");
-   * }, (combo) => {
-   *   console.log(`Combo progress: ${combo}`);
-   * });
-   * ```
-   *
-   * @example
-   * ```typescript
-   * kikey.on(
-   *   [{ ctrlKey: true, key: "s" }, { key: "a" }],
-   *   () => {
-   *     console.log("Pressed Ctrl+S, then 'a'");
-   *   },
-   *   (combo) => {
-   *     console.log(`Combo progress: ${combo}`);
-   *   },
-   * );
-   * ```
-   */
-  on(
-    sequence: string | KeyBinding[],
-    callback?: KikeyCallback,
-    onComboChange?: (combo: number) => void,
-  ): void;
+	/**
+	 * Registers a callback for a specified key sequence.
+	 *
+	 * @param sequence - The key sequence (e.g., "C-s a" for Ctrl+S followed by "a").
+	 * @param callback - The function to be called when the key sequence is detected.
+	 * @param onComboChange - The function to be called when the key sequence progresses.
+	 *
+	 * @example
+	 * ```typescript
+	 * kikey.on("C-s a", () => {
+	 *   console.log("Pressed Ctrl+S, then 'a'");
+	 * }, (combo) => {
+	 *   console.log(`Combo progress: ${combo}`);
+	 * });
+	 * ```
+	 *
+	 * @example
+	 * ```typescript
+	 * kikey.on(
+	 *   [{ ctrlKey: true, key: "s" }, { key: "a" }],
+	 *   () => {
+	 *     console.log("Pressed Ctrl+S, then 'a'");
+	 *   },
+	 *   (combo) => {
+	 *     console.log(`Combo progress: ${combo}`);
+	 *   },
+	 * );
+	 * ```
+	 */
+	on(
+		sequence: string | KeyBinding[],
+		callback?: KikeyCallback,
+		onComboChange?: (combo: number) => void,
+	): void;
 
-  /**
-   * Unregister a callback.
-   *
-   * @param callback - The callback function to remove.
-   *
-   * @example
-   * ```typescript
-   * const notice = () => alert("You pressed Ctrl+S");
-   * kikey.on("C-s", notice);
-   * kikey.off(notice);
-   * ```
-   */
-  off(callback: KikeyCallback): void;
+	/**
+	 * Unregister a callback.
+	 *
+	 * @param callback - The callback function to remove.
+	 *
+	 * @example
+	 * ```typescript
+	 * const notice = () => alert("You pressed Ctrl+S");
+	 * kikey.on("C-s", notice);
+	 * kikey.off(notice);
+	 * ```
+	 */
+	off(callback: KikeyCallback): void;
 
-  /**
-   * Registers a one-time callback for a specified key sequence.
-   *
-   * @param sequence - The key sequence (e.g., "C-s a" for Ctrl+S followed by "a").
-   * @param callback - The function to be called when the key sequence is detected.
-   * @param onComboChange - The function to be called when the key sequence progresses.
-   *
-   * @example
-   * ```typescript
-   * kikey.once("C-x", () => {
-   *   console.log("This is a one-time message");
-   * });
-   * ```
-   */
-  once(
-    sequence: string | KeyBinding[],
-    callback?: KikeyCallback,
-    onComboChange?: (combo: number) => void,
-  ): void;
+	/**
+	 * Registers a one-time callback for a specified key sequence.
+	 *
+	 * @param sequence - The key sequence (e.g., "C-s a" for Ctrl+S followed by "a").
+	 * @param callback - The function to be called when the key sequence is detected.
+	 * @param onComboChange - The function to be called when the key sequence progresses.
+	 *
+	 * @example
+	 * ```typescript
+	 * kikey.once("C-x", () => {
+	 *   console.log("This is a one-time message");
+	 * });
+	 * ```
+	 */
+	once(
+		sequence: string | KeyBinding[],
+		callback?: KikeyCallback,
+		onComboChange?: (combo: number) => void,
+	): void;
 
-  /**
-   * Update key sequence by callback.
-   *
-   * @param sequence - The key sequence (e.g., "C-s a" for Ctrl+S followed by "a").
-   * @param callback - The function to be called when the key sequence is detected.
-   *
-   * @example
-   * ```typescript
-   * function selectText() {
-   *   el.select();
-   * }
-   * kikey.on("C-i", selectText);
-   * kikey.updateSequence("C-a", selectText);
-   */
-  updateSequence(
-    newSequence: string | KeyBinding[],
-    callback: KikeyCallback,
-  ): void;
+	/**
+	 * Update key sequence by callback.
+	 *
+	 * @param sequence - The key sequence (e.g., "C-s a" for Ctrl+S followed by "a").
+	 * @param callback - The function to be called when the key sequence is detected.
+	 *
+	 * @example
+	 * ```typescript
+	 * function selectText() {
+	 *   el.select();
+	 * }
+	 * kikey.on("C-i", selectText);
+	 * kikey.updateSequence("C-a", selectText);
+	 */
+	updateSequence(
+		newSequence: string | KeyBinding[],
+		callback: KikeyCallback,
+	): void;
 
-  /**
-   * Enables the Kikey instance to start listening for keyboard events.
-   */
-  enable(): void;
+	/**
+	 * Enables the Kikey instance to start listening for keyboard events.
+	 */
+	enable(): void;
 
-  /**
-   * Disables the Kikey instance from listening to keyboard events.
-   */
-  disable(): void;
+	/**
+	 * Disables the Kikey instance from listening to keyboard events.
+	 */
+	disable(): void;
 
-  /**
-   * Starts recording keyboard events.
-   *
-   * @example
-   * ```typescript
-   * kikey.startRecord();
-   * // User presses key strokes...
-   * const sequence = kikey.stopRecord();
-   * console.log(`Recorded sequence: ${sequence}`);
-   * ```
-   */
-  startRecord(): void;
+	/**
+	 * Starts recording keyboard events.
+	 *
+	 * @example
+	 * ```typescript
+	 * kikey.startRecord();
+	 * // User presses key strokes...
+	 * const sequence = kikey.stopRecord();
+	 * console.log(`Recorded sequence: ${sequence}`);
+	 * ```
+	 */
+	startRecord(): void;
 
-  /**
-   * Stops recording keyboard events and returns the recorded key sequence.
-   *
-   * @returns The recorded key sequence. If no key is pressed, it returns null.
-   *
-   * @example
-   * ```typescript
-   * kikey.startRecord();
-   * // User presses key strokes...
-   * const sequence = kikey.stopRecord();
-   * console.log(`Recorded sequence: ${sequence}`);
-   * ```
-   */
-  stopRecord(): string | null;
+	/**
+	 * Stops recording keyboard events and returns the recorded key sequence.
+	 *
+	 * @returns The recorded key sequence. If no key is pressed, it returns null.
+	 *
+	 * @example
+	 * ```typescript
+	 * kikey.startRecord();
+	 * // User presses key strokes...
+	 * const sequence = kikey.stopRecord();
+	 * console.log(`Recorded sequence: ${sequence}`);
+	 * ```
+	 */
+	stopRecord(): string | null;
 }
 
 function parseSequence(sequence: string | KeyBinding[]): KeyBinding[] {
-  // split by whitespace and remove empty characters
-  let bindings: KeyBinding[];
-  if (typeof sequence === "string") {
-    bindings = sequence
-      .split(" ")
-      .filter((v) => v !== "")
-      .map(parseBinding);
-  } else {
-    bindings = sequence;
-  }
-  return bindings;
+	// split by whitespace and remove empty characters
+	let bindings: KeyBinding[];
+	if (typeof sequence === "string") {
+		bindings = sequence
+			.split(" ")
+			.filter((v) => v !== "")
+			.map(parseBinding);
+	} else {
+		bindings = sequence;
+	}
+	return bindings;
 }
 
 /**
@@ -178,187 +178,187 @@ function parseSequence(sequence: string | KeyBinding[]): KeyBinding[] {
  * @public
  */
 export function createKikey(targetElement?: HTMLElement | Document): Kikey {
-  if (typeof document === "undefined") {
-    throw Error("Only support browser environment.");
-  }
-  const target = targetElement ?? document;
+	if (typeof document === "undefined") {
+		throw Error("Only support browser environment.");
+	}
+	const target = targetElement ?? document;
 
-  const registry = new Map<KikeyCallback, KeyBindingRegistry>();
+	const registry = new Map<KikeyCallback, KeyBindingRegistry>();
 
-  let prevKey = "";
-  let prevMod = "";
-  let isEnabled = true;
+	let prevKey = "";
+	let prevMod = "";
+	let isEnabled = true;
 
-  function toKeyBindings(sequence: string | KeyBinding[]) {
-    if (typeof sequence === "string") {
-      // split by whitespace and remove empty characters
-      return sequence
-        .split(" ")
-        .filter((v) => v !== "")
-        .map(parseBinding);
-    }
+	function toKeyBindings(sequence: string | KeyBinding[]) {
+		if (typeof sequence === "string") {
+			// split by whitespace and remove empty characters
+			return sequence
+				.split(" ")
+				.filter((v) => v !== "")
+				.map(parseBinding);
+		}
 
-    return sequence;
-  }
+		return sequence;
+	}
 
-  function isModifierKey(key: string): boolean {
-    // Like `["control", "shift", "alt", "meta"].includes(key.toLowerCase())` but better performance.
-    return (
-      key === "Control" || key === "Shift" || key === "Alt" || key === "Meta"
-    );
-  }
+	function isModifierKey(key: string): boolean {
+		// Like `["control", "shift", "alt", "meta"].includes(key.toLowerCase())` but better performance.
+		return (
+			key === "Control" || key === "Shift" || key === "Alt" || key === "Meta"
+		);
+	}
 
-  function handleKeyEvent(e: KeyboardEvent): void {
-    if (!isEnabled) return;
+	function handleKeyEvent(e: KeyboardEvent): void {
+		if (!isEnabled) return;
 
-    if (e.type === "keyup" && !isModifierKey(e.key)) {
-      prevKey = e.key.toLowerCase();
-    } else if (e.type === "keydown") {
-      const { ctrlKey, shiftKey, altKey, metaKey } = e;
-      const key = e.key.toLowerCase();
+		if (e.type === "keyup" && !isModifierKey(e.key)) {
+			prevKey = e.key.toLowerCase();
+		} else if (e.type === "keydown") {
+			const { ctrlKey, shiftKey, altKey, metaKey } = e;
+			const key = e.key.toLowerCase();
 
-      for (const binding of registry.values()) {
-        const { onComboChange, combo, bindings, callback } = binding;
-        // biome-ignore lint/style/noNonNullAssertion: <explanation>
-        const b = bindings[combo]!;
-        if (
-          // Use double logical NOT (!) operator to convert the potential
-          // `undefined` value to false.
-          !!b.ctrlKey === ctrlKey &&
-          !!b.shiftKey === shiftKey &&
-          !!b.altKey === altKey &&
-          !!b.metaKey === metaKey &&
-          b.key === key &&
-          (combo === 0 ||
-            bindings[combo - 1]?.key === prevKey ||
-            bindings[combo - 1]?.key === prevMod)
-        ) {
-          binding.combo++;
-          onComboChange instanceof Function && onComboChange(binding.combo);
-          if (binding.combo === bindings.length) {
-            binding.combo = 0;
-            callback(e);
-          }
-        } else {
-          // Reset binding combo to zero because it breaks the order.
-          onComboChange(combo);
-          binding.combo = 0;
-        }
-      }
+			for (const binding of registry.values()) {
+				const { onComboChange, combo, bindings, callback } = binding;
+				// biome-ignore lint/style/noNonNullAssertion: <explanation>
+				const b = bindings[combo]!;
+				if (
+					// Use double logical NOT (!) operator to convert the potential
+					// `undefined` value to false.
+					!!b.ctrlKey === ctrlKey &&
+					!!b.shiftKey === shiftKey &&
+					!!b.altKey === altKey &&
+					!!b.metaKey === metaKey &&
+					b.key === key &&
+					(combo === 0 ||
+						bindings[combo - 1]?.key === prevKey ||
+						bindings[combo - 1]?.key === prevMod)
+				) {
+					binding.combo++;
+					onComboChange instanceof Function && onComboChange(binding.combo);
+					if (binding.combo === bindings.length) {
+						binding.combo = 0;
+						callback(e);
+					}
+				} else {
+					// Reset binding combo to zero because it breaks the order.
+					onComboChange(combo);
+					binding.combo = 0;
+				}
+			}
 
-      if (isModifierKey(e.key)) {
-        prevMod = e.key;
-      }
-    }
-  }
+			if (isModifierKey(e.key)) {
+				prevMod = e.key;
+			}
+		}
+	}
 
-  target.addEventListener("keydown", handleKeyEvent as (e: Event) => void);
-  target.addEventListener("keyup", handleKeyEvent as (e: Event) => void);
+	target.addEventListener("keydown", handleKeyEvent as (e: Event) => void);
+	target.addEventListener("keyup", handleKeyEvent as (e: Event) => void);
 
-  /** Event record */
-  let record: KeyboardEvent[] = [];
-  /** Event handler for key sequence recording. */
-  const pushEvent = (e: KeyboardEvent) => record.push(e);
+	/** Event record */
+	let record: KeyboardEvent[] = [];
+	/** Event handler for key sequence recording. */
+	const pushEvent = (e: KeyboardEvent) => record.push(e);
 
-  return {
-    on(
-      sequence: string | KeyBinding[],
-      callback: KikeyCallback = () => {},
-      onComboChange: (combo: number) => void = () => {},
-    ): void {
-      registry.set(callback, {
-        bindings: toKeyBindings(sequence),
-        callback,
-        combo: 0,
-        onComboChange,
-      });
-    },
-    off(callback: KikeyCallback): void {
-      registry.delete(callback);
-    },
-    once(
-      sequence: string | KeyBinding[],
-      callback: KikeyCallback = () => {},
-      onComboChange: (combo: number) => void = () => {},
-    ): void {
-      registry.set(callback, {
-        bindings: toKeyBindings(sequence),
-        callback: (e) => {
-          this.off(callback);
-          callback(e);
-        },
-        combo: 0,
-        onComboChange,
-      });
-    },
-    updateSequence(
-      newSequence: string | KeyBinding[],
-      callback: KikeyCallback = () => {},
-    ): void {
-      const shortcut = registry.get(callback);
-      if (shortcut) {
-        shortcut.bindings = parseSequence(newSequence);
-        shortcut.combo = 0;
-      } else {
-        throw Error("Kikey callback not found in registry.");
-      }
-    },
-    enable(): void {
-      isEnabled = true;
-    },
-    disable(): void {
-      isEnabled = false;
-    },
-    startRecord(): void {
-      // @ts-ignore This is annoying, typescript said that keydown / keyup
-      // does not match listener (e: KeyboardEvent) => {}. Actually it works.
-      target.addEventListener("keydown", pushEvent);
-      // @ts-ignore
-      target.addEventListener("keyup", pushEvent);
-    },
-    stopRecord(): string | null {
-      // Clean up
-      // @ts-ignore
-      target.removeEventListener("keydown", pushEvent);
-      // @ts-ignore
-      target.removeEventListener("keyup", pushEvent);
+	return {
+		on(
+			sequence: string | KeyBinding[],
+			callback: KikeyCallback = () => {},
+			onComboChange: (combo: number) => void = () => {},
+		): void {
+			registry.set(callback, {
+				bindings: toKeyBindings(sequence),
+				callback,
+				combo: 0,
+				onComboChange,
+			});
+		},
+		off(callback: KikeyCallback): void {
+			registry.delete(callback);
+		},
+		once(
+			sequence: string | KeyBinding[],
+			callback: KikeyCallback = () => {},
+			onComboChange: (combo: number) => void = () => {},
+		): void {
+			registry.set(callback, {
+				bindings: toKeyBindings(sequence),
+				callback: (e) => {
+					this.off(callback);
+					callback(e);
+				},
+				combo: 0,
+				onComboChange,
+			});
+		},
+		updateSequence(
+			newSequence: string | KeyBinding[],
+			callback: KikeyCallback = () => {},
+		): void {
+			const shortcut = registry.get(callback);
+			if (shortcut) {
+				shortcut.bindings = parseSequence(newSequence);
+				shortcut.combo = 0;
+			} else {
+				throw Error("Kikey callback not found in registry.");
+			}
+		},
+		enable(): void {
+			isEnabled = true;
+		},
+		disable(): void {
+			isEnabled = false;
+		},
+		startRecord(): void {
+			// @ts-ignore This is annoying, typescript said that keydown / keyup
+			// does not match listener (e: KeyboardEvent) => {}. Actually it works.
+			target.addEventListener("keydown", pushEvent);
+			// @ts-ignore
+			target.addEventListener("keyup", pushEvent);
+		},
+		stopRecord(): string | null {
+			// Clean up
+			// @ts-ignore
+			target.removeEventListener("keydown", pushEvent);
+			// @ts-ignore
+			target.removeEventListener("keyup", pushEvent);
 
-      const sequence: string[] = [];
-      let slow = 0;
-      let fast = 1;
-      while (slow < record.length) {
-        // biome-ignore lint/style/noNonNullAssertion: <explanation>
-        const slowKey = record[slow]!;
-        if (slowKey.type === "keydown" && record.at(fast)?.type === "keyup") {
-          let b = slowKey.ctrlKey ? "C" : "";
-          b += slowKey.shiftKey ? "S" : "";
-          b += slowKey.altKey ? "A" : "";
-          b += slowKey.metaKey ? "M" : "";
-          b = b.split("").join("-");
+			const sequence: string[] = [];
+			let slow = 0;
+			let fast = 1;
+			while (slow < record.length) {
+				// biome-ignore lint/style/noNonNullAssertion: <explanation>
+				const slowKey = record[slow]!;
+				if (slowKey.type === "keydown" && record.at(fast)?.type === "keyup") {
+					let b = slowKey.ctrlKey ? "C" : "";
+					b += slowKey.shiftKey ? "S" : "";
+					b += slowKey.altKey ? "A" : "";
+					b += slowKey.metaKey ? "M" : "";
+					b = b.split("").join("-");
 
-          let key = slowKey.key.toLowerCase();
+					let key = slowKey.key.toLowerCase();
 
-          if (key === " ") {
-            key = "space";
-          } else if (key === "-") {
-            key = "dash";
-          } else if (isModifierKey(key)) {
-            key = "";
-          }
-          if (b.length > 0 && key) {
-            // Combination
-            b += `-${key}`;
-          } else if (b.length === 0) {
-            // Single key
-            b = key;
-          }
-          sequence.push(b);
-        }
-        slow++;
-        fast++;
-      }
-      record = [];
-      return sequence.length > 0 ? sequence.join(" ") : null;
-    },
-  };
+					if (key === " ") {
+						key = "space";
+					} else if (key === "-") {
+						key = "dash";
+					} else if (isModifierKey(key)) {
+						key = "";
+					}
+					if (b.length > 0 && key) {
+						// Combination
+						b += `-${key}`;
+					} else if (b.length === 0) {
+						// Single key
+						b = key;
+					}
+					sequence.push(b);
+				}
+				slow++;
+				fast++;
+			}
+			record = [];
+			return sequence.length > 0 ? sequence.join(" ") : null;
+		},
+	};
 }
