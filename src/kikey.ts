@@ -11,7 +11,7 @@ interface KeyBindingRegistry {
 	onComboChange: (combo: number) => void;
 }
 
-type KikeyCallback = (e: KeyboardEvent) => void;
+export type KikeyCallback = (e: KeyboardEvent) => void;
 
 /**
  * The Kikey instance interface for managing keyboard shortcuts.
@@ -115,6 +115,11 @@ export interface Kikey {
 	 * Disables the Kikey instance from listening to keyboard events.
 	 */
 	disable(): void;
+
+	/**
+	 * Destroy the Kikey instance by removing all listeners.
+	 */
+	destroy(): void;
 
 	/**
 	 * Starts recording keyboard events.
@@ -308,6 +313,13 @@ export function createKikey(targetElement?: HTMLElement | Document): Kikey {
 		},
 		disable(): void {
 			isEnabled = false;
+		},
+		destroy(): void {
+			target.removeEventListener(
+				"keydown",
+				handleKeyEvent as (e: Event) => void,
+			);
+			target.removeEventListener("keyup", handleKeyEvent as (e: Event) => void);
 		},
 		startRecord(): void {
 			// @ts-ignore This is annoying, typescript said that keydown / keyup

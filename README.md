@@ -101,6 +101,10 @@ const sequence = kikey.stopRecord();
 
 &emsp;&emsp;Disable kikey.
 
+#### destroy()
+
+&emsp;&emsp;Destroy kikey instance, will remove all listeners.
+
 #### startRecord()
 
 &emsp;&emsp;Start shortcut recording.
